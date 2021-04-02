@@ -1,0 +1,8 @@
+SDK-2021-02-23/*
+*.slo
+*.lo
+*.o
+*.obj
+*.exe
+*.out
+*.app
