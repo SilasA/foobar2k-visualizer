@@ -7,6 +7,11 @@
 #ifndef PCH_H
 #define PCH_H
 
+//#define DEBUG
+
+#define SUCCESS 0
+#define FAILURE 1
+
 // add headers that you want to pre-compile here
 #include "framework.h"
 

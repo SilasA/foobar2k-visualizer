@@ -3,7 +3,7 @@ SDK/*
 *.slo
 *.lo
 *.o
-*.obj
+*.*obj
 *.exe
 *.out
 *.app
@@ -15,6 +15,7 @@ SDK/*
 *.dylib
 *.a
 *.log
+*.tlog*
 *.exp
 *.ilk
-*.pdb
+*.*pdb
