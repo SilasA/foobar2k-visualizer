@@ -8,11 +8,6 @@
 
 #define PLUGIN_NAME "Winamp Theatrical Visualizer"
 
-#define DEFAULT_WINDOW_WIDTH 800
-#define DEFAULT_WINDOW_HEIGHT 600
-
-char description[] = "Theatrical Visualizer";
-
 typedef struct winampVisModule {
 	char* description;		// Description of module
 	HWND hwndParent;		// Parent window (filled by app)
@@ -62,49 +57,5 @@ void quit(struct winampVisModule* this_mod);
 void resizeWindow(int width, int height);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-// Visualizer data
-static winampVisualizer _vis = {
-	{
-		VERSION,
-		description,
-		getModule
-	},
-	{
-		description,
-		NULL,
-		NULL,
-		0,
-		0,
-		0,
-		10,
-		0,
-		2,
-		{ 0, },
-		{ 0, },
-		config,
-		init,
-		render,
-		quit
-	},
-
-	NULL,
-	NULL,
-	NULL
-};
-
-
-winampVisualizer* getVisInstance() {
-	return &_vis;
-}
-
-winampVisModule* getModule(int which) {
-	switch (which) {
-	case 0:
-		return &_vis.mod;
-	default:
-		return NULL;
-	}
-}
 
 #endif // VIS_VISUALIZER_H

@@ -19,3 +19,4 @@ SDK/*
 *.exp
 *.ilk
 *.*pdb
+logs/*

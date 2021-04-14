@@ -2,31 +2,68 @@
 #include "pch.h"
 #include <windows.h>
 #include "vis_visualizer.h"
+#include "Spectrum.h"
 #include <gl/gl.h>
 #include <gl/glu.h>
 //#include <gl/glaux.h>
+
+char description[] = "Theatrical Visualizer";
+
+// Visualizer data
+static winampVisualizer _vis = {
+	{
+		VERSION,
+		description,
+		getModule
+	},
+	{
+		description,
+		NULL,
+		NULL,
+		0,
+		0,
+		0,
+		10,
+		2,
+		0,
+		{ 0, },
+		{ 0, },
+		config,
+		init,
+		render,
+		quit
+	},
+
+	NULL,
+	NULL,
+	NULL
+};
+
+// Visualization modules
+Spectrum _spectrumVis(
+	getModule(0),
+	{ 40, 25, 760, 575 },
+	36
+);
+
+winampVisualizer* getVisInstance() {
+	return &_vis;
+}
+
+winampVisModule* getModule(int which) {
+	switch (which) {
+	case 0:
+		return &_vis.mod;
+	default:
+		return NULL;
+	}
+}
 
 static HINSTANCE GetMyInstance() {
 	MEMORY_BASIC_INFORMATION mbi = { 0 };
 	if (VirtualQuery(GetMyInstance, &mbi, sizeof(mbi)))
 		return (HINSTANCE)mbi.AllocationBase;
 	return NULL;
-}
-
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-                     )
-{
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-    return TRUE;
 }
 
 void config(struct winampVisModule* this_mod) {
@@ -130,45 +167,41 @@ int init(struct winampVisModule* this_mod) {
 	ShowWindow(parent, SW_SHOWNORMAL);
 	
 	// Initialize graphics
+	int ret = _spectrumVis.Init();
+	if (ret != SUCCESS) {
+		MessageBox(this_mod->hwndParent, L"Init... Failed", L"", MB_OK);
+	}
 
-#ifdef DEBUG
-	MessageBox(this_mod->hwndParent, L"Init... Successfully installed", L"", MB_OK);
-#endif
 	return SUCCESS;
 }
 
 int render(struct winampVisModule* this_mod) {
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	// TODO: replace DEFAULT_WINDOW_WIDTH with current window width
+	glOrtho(
+		0, DEFAULT_WINDOW_WIDTH,
+		0, DEFAULT_WINDOW_HEIGHT,
+		-1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	// Render
-	// TESTING drawing a cube
-
-	glPushMatrix();
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glTranslatef(.2f, .2f, .2f);
-	glScalef(1.0f, 1.0f, 1.0f);
-
-	glBegin(GL_POLYGON);
-
-	/*      This is the front face*/
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(-1.0f, 0.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(0.0f, -1.0f, 0.0f);
-
-	glEnd();
-	glPopMatrix();
+	int ret = _spectrumVis.Render();
 
 	glFlush();
 	SwapBuffers(getVisInstance()->hDC);
 
-	return SUCCESS;
+	return ret;
 }
 
 void quit(struct winampVisModule* this_mod) {
 	// Stop/dispose of graphics
+	_spectrumVis.Quit();
+
 	wglMakeCurrent(NULL, NULL);
 	wglDeleteContext(getVisInstance()->hRC);
 	ReleaseDC(getVisInstance()->hWnd, getVisInstance()->hDC);
