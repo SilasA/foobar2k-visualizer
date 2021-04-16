@@ -23,7 +23,7 @@ static winampVisualizer _vis = {
 		0,
 		0,
 		0,
-		10,
+		5,
 		2,
 		0,
 		{ 0, },
@@ -42,7 +42,7 @@ static winampVisualizer _vis = {
 // Visualization modules
 Spectrum _spectrumVis(
 	getModule(0),
-	{ 40, 575, 760, 25 },
+	{ 40, 375, 760, 25 },
 	512
 );
 

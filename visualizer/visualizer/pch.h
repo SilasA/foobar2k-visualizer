@@ -13,8 +13,8 @@
 #define FAILURE 1
 #define EXIT 2
 
-#define DEFAULT_WINDOW_WIDTH 800
-#define DEFAULT_WINDOW_HEIGHT 600
+#define DEFAULT_WINDOW_WIDTH 592
+#define DEFAULT_WINDOW_HEIGHT 400
 
 // add headers that you want to pre-compile here
 #include "framework.h"

@@ -70,7 +70,7 @@ Spectrum::Spectrum(winampVisModule* mod, RECT dimensions, int bars, int rollingA
 
 	// Proportion of peak data and spectrum dimensions
 	int height = m_dimensions.top - m_dimensions.bottom;
-	m_barScale = height / std::log10((float)SPECTRUM_RANGE / (m_bars / 2.0f) * 255);
+	m_barScale = height / (std::log10((float)SPECTRUM_RANGE / (m_bars / 2.0f) * 255 + 50) - std::log10(50.f));
 }
 
 Spectrum::~Spectrum()
@@ -132,8 +132,8 @@ int Spectrum::Render()
 
 		// TODO: replace DEFAULT_WINDOW_WIDTH with current window width
 		x = m_dimensions.left + barWidth * i;
-		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i]) : 0;
-		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel) * m_barScale;
+		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i] + 50) : 0;
+		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel - log10(50.f)) * m_barScale;
 		
 #ifdef DEBUG
 		//m_log << "col " << i << ": " << m_spectrumBars[i] << std::endl;
