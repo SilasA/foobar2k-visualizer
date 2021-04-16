@@ -3,6 +3,12 @@
 
 #include <gl/gl.h>
 #include <gl/glu.h>
+#include <cmath>
+#include <algorithm>
+
+#define SPECTRUM_BEGIN 3
+#define SPECTRUM_END 515
+#define SPECTRUM_RANGE (SPECTRUM_END - SPECTRUM_BEGIN)
 
 Spectrum::Spectrum(winampVisModule* mod, RECT dimensions, int bars)
 {
@@ -14,13 +20,13 @@ Spectrum::Spectrum(winampVisModule* mod, RECT dimensions, int bars)
 	m_spectrumBars = new float[m_bars];
 
 	// Proportion of peak data and spectrum dimensions
-	int height = m_dimensions.bottom - m_dimensions.top;
-	m_barScale = height / (288.0f / (m_bars / 2.0f) * 255);
+	int height = m_dimensions.top - m_dimensions.bottom;
+	m_barScale = height / std::log2((float)SPECTRUM_RANGE / (m_bars / 2.0f) * 255);
 }
 
 Spectrum::~Spectrum()
 {
-	delete m_spectrumBars;
+	delete[] m_spectrumBars;
 }
 
 int Spectrum::Init() 
@@ -41,18 +47,22 @@ int Spectrum::Render()
 		m_spectrumBars[i] = 0;
 	}
 
+	// Goal:
+	// Map 0->576 x2 => 3->515 x2
+
+
 	// Left (reverse fill for mirror effect)
-	int div = 288 / (m_bars / 2);
-	for (int i = 0; i < 288; i++) {
-		m_spectrumBars[(288 - i) / div] += m_mod->spectrumData[0][i];
+	int div = SPECTRUM_RANGE / (m_bars / 2);
+	for (int i = 0; i < SPECTRUM_RANGE; i++) {
+		m_spectrumBars[(SPECTRUM_RANGE - i - 1) / div] += m_mod->spectrumData[0][i + SPECTRUM_BEGIN];
 #ifdef DEBUG
 		//m_log << "col " << i << ": " << (int)m_mod->spectrumData[0][i] << std::endl;
 #endif
 	}
 
 	// Right
-	for (int i = 0; i < 288; i++) {
-		m_spectrumBars[18 + i / div] += m_mod->spectrumData[1][i];
+	for (int i = 0; i < SPECTRUM_RANGE; i++) {
+		m_spectrumBars[(m_bars + i) / div] += m_mod->spectrumData[1][i + SPECTRUM_BEGIN];
 	}
 
 	// TODO: Trim and scale
@@ -70,17 +80,18 @@ int Spectrum::Render()
 		float x, y, z = 0;
 
 		// TODO: replace DEFAULT_WINDOW_WIDTH with current window width
-		x = 40 + barWidth * i;
-		y = 25 + m_spectrumBars[i] * m_barScale;
+		x = m_dimensions.left + barWidth * i;
+		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i]) : 0;
+		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel) * m_barScale;
 		
 #ifdef DEBUG
 		//m_log << "col " << i << ": " << m_spectrumBars[i] << std::endl;
-		m_log << "col " << i << " x: " << x << " y: " << y << std::endl;
+		m_log << "col " << i << " x: " << x << " d: " << m_spectrumBars[i] << " log: " << logLevel << std::endl;
 #endif
 
 		glRectf(
 			x,
-			25,
+			m_dimensions.bottom,
 			x + barWidth,
 			y
 		);

@@ -42,8 +42,8 @@ static winampVisualizer _vis = {
 // Visualization modules
 Spectrum _spectrumVis(
 	getModule(0),
-	{ 40, 25, 760, 575 },
-	36
+	{ 40, 575, 760, 25 },
+	512
 );
 
 winampVisualizer* getVisInstance() {
@@ -82,10 +82,10 @@ int init(struct winampVisModule* this_mod) {
 	int nPixelFormat;
 
 	getVisInstance()->windowState.flags |= EMBED_FLAGS_NOTRANSPARENCY;
-	getVisInstance()->windowState.r.left = 0;
-	getVisInstance()->windowState.r.top = 0;
-	getVisInstance()->windowState.r.right = DEFAULT_WINDOW_WIDTH;
-	getVisInstance()->windowState.r.bottom = DEFAULT_WINDOW_HEIGHT;
+	getVisInstance()->windowState.r.left = 50;
+	getVisInstance()->windowState.r.top = 50;
+	getVisInstance()->windowState.r.right = 50 + DEFAULT_WINDOW_WIDTH;
+	getVisInstance()->windowState.r.bottom = 50 + DEFAULT_WINDOW_HEIGHT;
 
 	*(void**)&e = (void*)SendMessage(this_mod->hwndParent, WM_WA_IPC, (LPARAM)0, IPC_GET_EMBEDIF);
 
@@ -228,14 +228,13 @@ void resizeWindow(int width, int height) {
 		height = 1;
 
 	glViewport(0, 0, width, height);
-
-	/*
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.0f, (float)width / (float)height, 0.1f, 1000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	*/
+	
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -260,6 +259,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_SIZE:
 	
 		resizeWindow(LOWORD(lParam), HIWORD(lParam));
+		return 0;
+	
+	case WM_MOVE:
+
+		//glViewport(LOWORD(lParam), HIWORD(lParam), DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+
 		return 0;
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
