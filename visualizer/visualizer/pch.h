@@ -7,14 +7,25 @@
 #ifndef PCH_H
 #define PCH_H
 
-//#define DEBUG
+#define DEBUG
 
 #define SUCCESS 0
 #define FAILURE 1
 #define EXIT 2
 
-#define DEFAULT_WINDOW_WIDTH 592
-#define DEFAULT_WINDOW_HEIGHT 400
+#define DEFAULT_WINDOW_WIDTH (592 * 2)
+#define DEFAULT_WINDOW_HEIGHT (400 * 2)
+
+#define RENDER_PERIOD 10
+
+#define GRAVITY 10.0f
+
+// Timing
+#ifdef DEBUG
+	#define TIME_CAST(t) std::chrono::time_point_cast<std::chrono::milliseconds>(t)
+	#define TIME_MS std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>
+	#define DURATION_CAST(d) std::chrono::duration_cast<std::chrono::milliseconds>(d)
+#endif
 
 // add headers that you want to pre-compile here
 #include "framework.h"

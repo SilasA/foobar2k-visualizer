@@ -2,9 +2,12 @@
 #define SPECTRUM_H
 
 #include "vis_visualizer.h"
+#include "Peak.h"
 
-#include <deque>
 #include <array>
+#include <chrono>
+#include <deque>
+#include <vector>
 
 #ifdef DEBUG
 #include <fstream>
@@ -16,6 +19,7 @@ class Spectrum
 {
 private:
 	std::deque<std::array<float, 576>> m_spectrumRolling[2];
+	std::vector<Peak> m_peaks;
 
 	float	m_spectrumRollingAvg[2][576];
 	float*	m_spectrumBars;
@@ -26,6 +30,10 @@ private:
 	RECT m_dimensions;
 
 	winampVisModule* m_mod;
+
+#ifdef DEBUG
+	TIME_MS m_last;
+#endif
 
 	// Rolling average functions
 	float UpdateCurrentAverage();

@@ -23,7 +23,7 @@ static winampVisualizer _vis = {
 		0,
 		0,
 		0,
-		5,
+		RENDER_PERIOD,
 		2,
 		0,
 		{ 0, },
@@ -42,8 +42,13 @@ static winampVisualizer _vis = {
 // Visualization modules
 Spectrum _spectrumVis(
 	getModule(0),
-	{ 40, 375, 760, 25 },
-	512
+	{ 
+		40, 
+		DEFAULT_WINDOW_HEIGHT - 25, 
+		DEFAULT_WINDOW_WIDTH - 40, 
+		25 
+	},
+	256
 );
 
 winampVisualizer* getVisInstance() {
