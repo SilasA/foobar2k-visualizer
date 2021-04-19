@@ -161,11 +161,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Peak.h" />
     <ClInclude Include="Spectrum.h" />
     <ClInclude Include="vis_visualizer.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Peak.cpp" />
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="vis_visualizer.cpp" />
     <ClCompile Include="pch.cpp">

@@ -27,6 +27,9 @@
     <ClInclude Include="Spectrum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Peak.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Spectrum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Peak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

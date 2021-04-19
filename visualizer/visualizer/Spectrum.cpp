@@ -9,8 +9,8 @@
 
 #define DATA_SIZE 576
 
-#define SPECTRUM_BEGIN 3
-#define SPECTRUM_END 515
+#define SPECTRUM_BEGIN 5
+#define SPECTRUM_END 517
 #define SPECTRUM_RANGE (SPECTRUM_END - SPECTRUM_BEGIN)
 
 float Spectrum::UpdateCurrentAverage() 
@@ -72,7 +72,7 @@ Spectrum::Spectrum(winampVisModule* mod, RECT dimensions, int bars, int rollingA
 
 	// Proportion of peak data and spectrum dimensions
 	int height = m_dimensions.top - m_dimensions.bottom;
-	m_barScale = height / (std::log10((float)SPECTRUM_RANGE / (m_bars / 2.0f) * 255 + 50) - std::log10(50.f));
+	m_barScale = height / (std::log10((float)SPECTRUM_RANGE / (m_bars / 2.0f) * 255 + 100) - std::log10(100.0f));
 }
 
 Spectrum::~Spectrum()
@@ -127,20 +127,47 @@ int Spectrum::Render()
 		float x, y, z = 0;
 
 		x = m_dimensions.left + barWidth * i;
-		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i] + 50) : 0;
-		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel - log10(50.f)) * m_barScale;
-		
+		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i] + 100) : 0;
+		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel - log10(100.f)) * m_barScale;
+
 		// Render peak
 		m_peaks[i].Update(y);
 		m_peaks[i].Render();
 
-		glColor3f(1, 0, 0);
-		glRectf(
+		// Base color
+		glBegin(GL_POLYGON);
+		glColor3f(0, 1, 0);
+		glVertex3f(x, m_dimensions.bottom, 0);
+		glVertex3f(x + barWidth, m_dimensions.bottom, 0);
+
+		// Peak Color
+		float max_height = m_dimensions.top - m_dimensions.bottom;
+		if (y > m_dimensions.bottom + max_height * .9) {
+			float extY = m_dimensions.bottom + max_height * .9;
+			glVertex3f(x + barWidth, extY, 0);
+			glVertex3f(x, extY, 0);
+			glEnd();
+			glBegin(GL_POLYGON);
+			glColor3f(1, 0, 0);
+			glVertex3f(x, extY, 0);
+			glVertex3f(x + barWidth, extY, 0);
+
+			glColor3f(1, 0, 0);
+			glVertex3f(x + barWidth, y, 0);
+			glVertex3f(x, y, 0);
+		}
+		else {
+			glVertex3f(x + barWidth, y, 0);
+			glVertex3f(x, y, 0);
+		}
+
+		/*glRectf(
 			x,
 			m_dimensions.bottom,
 			x + barWidth,
 			y
-		);
+		);*/
+		glEnd();
 	}
 
 	return SUCCESS;

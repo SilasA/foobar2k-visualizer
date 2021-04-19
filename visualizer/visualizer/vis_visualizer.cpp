@@ -48,7 +48,7 @@ Spectrum _spectrumVis(
 		DEFAULT_WINDOW_WIDTH - 40, 
 		25 
 	},
-	256
+	512
 );
 
 winampVisualizer* getVisInstance() {

@@ -7,14 +7,16 @@
 #ifndef PCH_H
 #define PCH_H
 
-#define DEBUG
+//#define DEBUG
 
 #define SUCCESS 0
 #define FAILURE 1
 #define EXIT 2
 
-#define DEFAULT_WINDOW_WIDTH (592 * 2)
-#define DEFAULT_WINDOW_HEIGHT (400 * 2)
+//#define DEFAULT_WINDOW_WIDTH (592 * 2)
+//#define DEFAULT_WINDOW_HEIGHT (400 * 2)
+#define DEFAULT_WINDOW_WIDTH 1104
+#define DEFAULT_WINDOW_HEIGHT 800
 
 #define RENDER_PERIOD 10
 
