@@ -7,7 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
-//#define DEBUG
+#define DEBUG
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -21,6 +21,8 @@
 #define RENDER_PERIOD 10
 
 #define GRAVITY 10.0f
+
+#define SPECTRUM_OVERLAY "/overlay.png"
 
 // Timing
 #ifdef DEBUG

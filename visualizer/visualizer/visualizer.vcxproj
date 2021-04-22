@@ -117,7 +117,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -136,7 +136,8 @@
       <AdditionalDependencies>OpenGL32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetDir)$(ProjectName).dll" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\vis_visualizer.dll"</Command>
+      <Command>copy /y "$(TargetDir)$(ProjectName).dll" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\vis_visualizer.dll"
+copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\overlay.png"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,12 +162,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="libpng\lodepng.h" />
     <ClInclude Include="Peak.h" />
     <ClInclude Include="Spectrum.h" />
     <ClInclude Include="vis_visualizer.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="libpng\lodepng.cpp" />
     <ClCompile Include="Peak.cpp" />
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="vis_visualizer.cpp" />
@@ -176,6 +179,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\overlay.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

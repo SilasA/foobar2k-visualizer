@@ -5,9 +5,9 @@
 #include "Spectrum.h"
 #include <gl/gl.h>
 #include <gl/glu.h>
-//#include <gl/glaux.h>
+#include <Winamp/wa_ipc.h>
 
-char description[] = "Theatrical Visualizer";
+char description[] = "Spectrum Visualizer";
 
 // Visualizer data
 static winampVisualizer _vis = {
@@ -134,6 +134,7 @@ int init(struct winampVisModule* this_mod) {
 	}
 
 	SendMessage(this_mod->hwndParent, WM_WA_IPC, (WPARAM)getVisInstance()->hWnd, IPC_SETVISWND);
+	char* dir = (char *)SendMessage(this_mod->hwndParent, WM_WA_IPC, 0, IPC_GETPLUGINDIRECTORY);
 
 	// OpenGL on window
 	if (!(getVisInstance()->hDC = GetDC(getVisInstance()->hWnd))) {
@@ -165,6 +166,8 @@ int init(struct winampVisModule* this_mod) {
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	
 	resizeWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
@@ -172,7 +175,7 @@ int init(struct winampVisModule* this_mod) {
 	ShowWindow(parent, SW_SHOWNORMAL);
 	
 	// Initialize graphics
-	int ret = _spectrumVis.Init();
+	int ret = _spectrumVis.Init(dir);
 	if (ret != SUCCESS) {
 		MessageBox(this_mod->hwndParent, L"Init... Failed", L"", MB_OK);
 	}

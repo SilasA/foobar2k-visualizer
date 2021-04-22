@@ -6,7 +6,7 @@
 
 #define VERSION 0x10
 
-#define PLUGIN_NAME "Winamp Theatrical Visualizer"
+#define PLUGIN_NAME "Winamp Spectrum Visualizer"
 
 typedef struct winampVisModule {
 	char* description;		// Description of module

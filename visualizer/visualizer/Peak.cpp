@@ -22,7 +22,7 @@ void Peak::Update(float level, float dt)
 	}
 
 	// Level increasing
-	if (level > m_location.bottom) 
+	else if (level > m_location.bottom) 
 	{
 		m_velocity = 0.0;
 		m_location.bottom = level;
