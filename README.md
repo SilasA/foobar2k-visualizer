@@ -1,4 +1,4 @@
-# foobar2k-visualizer
+# Winamp-Based Visualizer
 A foobar2000/Winamap spectrum visualizer for CIS 367.  All graphics are done using OpenGL and libpng.  This plugin is completely compatible with Winamp or any Winamp emulators such as Shpeck although it can be a bit buggy on the later.  
 
 ## How to use
