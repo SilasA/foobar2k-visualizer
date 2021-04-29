@@ -7,7 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
-#define DEBUG
+//#define DEBUG
 
 #define SUCCESS 0
 #define FAILURE 1

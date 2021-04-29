@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "vis_visualizer.h"
 #include "Spectrum.h"
+#include "Background.h"
 #include <gl/gl.h>
 #include <gl/glu.h>
 #include <Winamp/wa_ipc.h>
@@ -39,7 +40,7 @@ static winampVisualizer _vis = {
 	NULL
 };
 
-// Visualization modules
+// Visualization module
 Spectrum _spectrumVis(
 	getModule(0),
 	{ 
@@ -49,6 +50,16 @@ Spectrum _spectrumVis(
 		25 
 	},
 	512
+);
+
+Background _background(
+	getModule(0),
+	{
+		40,
+		DEFAULT_WINDOW_HEIGHT - 25,
+		DEFAULT_WINDOW_WIDTH - 40,
+		25
+	}
 );
 
 winampVisualizer* getVisInstance() {
@@ -175,9 +186,14 @@ int init(struct winampVisModule* this_mod) {
 	ShowWindow(parent, SW_SHOWNORMAL);
 	
 	// Initialize graphics
-	int ret = _spectrumVis.Init(dir);
-	if (ret != SUCCESS) {
-		MessageBox(this_mod->hwndParent, L"Init... Failed", L"", MB_OK);
+	if (_spectrumVis.Init(dir)) {
+		MessageBox(this_mod->hwndParent, L"Spectrum Init Failed", L"", MB_OK);
+		return FAILURE;
+	}
+
+	if (_background.Init()) {
+		MessageBox(this_mod->hwndParent, L"Background Init Failed", L"", MB_OK);
+		return FAILURE;
 	}
 
 	return SUCCESS;
@@ -188,22 +204,23 @@ int render(struct winampVisModule* this_mod) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	// TODO: replace DEFAULT_WINDOW_WIDTH with current window width
+	// This can remain the default because the window resize just scales.
 	glOrtho(
 		0, DEFAULT_WINDOW_WIDTH,
 		0, DEFAULT_WINDOW_HEIGHT,
-		-1, 1);
+		0, 1);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	// Render
-	int ret = _spectrumVis.Render();
+	if (_background.Render() || _spectrumVis.Render())
+		return FAILURE;
 
 	glFlush();
 	SwapBuffers(getVisInstance()->hDC);
 
-	return ret;
+	return SUCCESS;
 }
 
 void quit(struct winampVisModule* this_mod) {

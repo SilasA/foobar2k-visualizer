@@ -144,6 +144,7 @@ int Spectrum::Render()
 	// Clear bar data
 	memset(m_spectrumBars, 0, sizeof(int) * DATA_SIZE);
 
+	// Map the raw spectrum data to the spectrum bars (often a reduction)
 	// Left (reverse fill for mirror effect)
 	int div = SPECTRUM_RANGE / (m_bars / 2);
 	for (int i = 0; i < SPECTRUM_RANGE; i++) {
@@ -157,6 +158,7 @@ int Spectrum::Render()
 
 	int barWidth = (m_dimensions.right - m_dimensions.left) / m_bars;
 
+	// Draw the overlay
 	glBegin(GL_QUADS);
 	glEnable(GL_TEXTURE_2D);
 	glColor3ub(255, 255, 255);
@@ -171,6 +173,7 @@ int Spectrum::Render()
 	for (int i = 0; i < m_bars; i++) {
 		float x, y, z = 0;
 
+		// Stupid faux-logarithm scale math
 		x = m_dimensions.left + barWidth * i;
 		float logLevel = m_spectrumBars[i] > 0 ? std::log10(m_spectrumBars[i] + 100) : 0;
 		y = m_dimensions.bottom + (m_spectrumBars[i] < 1 ? 0 : logLevel - log10(100.f)) * m_barScale;
