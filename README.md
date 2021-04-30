@@ -1,5 +1,5 @@
 # Winamp-Based Visualizer
-A foobar2000/Winamap spectrum visualizer for CIS 367.  All graphics are done using OpenGL and libpng.  This plugin is completely compatible with Winamp or any Winamp emulators such as Shpeck although it can be a bit buggy on the later.  
+A Winamp/foobar2000 spectrum visualizer for CIS 367.  All graphics are done using OpenGL and libpng.  This plugin is completely compatible with Winamp or any Winamp emulators such as Shpeck although it can be a bit buggy on the later.  
 
 ![Visualizer](https://imgur.com/pysPVDk.png)
 
@@ -9,9 +9,11 @@ A foobar2000/Winamap spectrum visualizer for CIS 367.  All graphics are done usi
 - Background flash beat detection
 
 ## How to use
-You can check the releases page to download visualizer.zip.  If you intent to use foobar2000, make sure to install Shpeck found [here](https://www.foobar2000.org/components/view/foo_vis_shpeck).  More foobar2000 installation instructions can be found [here](https://wiki.hydrogenaud.io/index.php?title=Foobar2000:How_to_install_a_component).
+You can check the releases page to download visualizer.zip.  If you intent to use foobar2000, make sure to install Shpeck found [here](https://www.foobar2000.org/components/view/foo_vis_shpeck).  More foobar2000 installation instructions can be found [here](https://wiki.hydrogenaud.io/index.php?title=Foobar2000:How_to_install_a_component).  
 
-#### Foobar2000
+NOTE: Shpeck is not a finished product and can be buggy and crash foobar2000 occasionally.  For an easier experience use Winamp.
+
+#### Foobar2000 (buggy)
 - Navigate to your foobar2000 folder and there should be a folder called Plugin.  
 - Extract visualizer.zip into the Plugin folder and ensure ```vis_visualizer.dll``` and ```overlay.png``` were extracted.
 - There are multiple ways to start the visualization:
