@@ -136,9 +136,8 @@
       <AdditionalDependencies>OpenGL32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetDir)$(ProjectName).dll" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\vis_visualizer.dll"
-copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\overlay.png"
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
