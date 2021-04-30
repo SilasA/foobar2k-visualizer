@@ -36,6 +36,9 @@
     <ClInclude Include="libpng\lodepng.h">
       <Filter>Lib</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -52,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="libpng\lodepng.cpp">
       <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

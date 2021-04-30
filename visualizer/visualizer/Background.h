@@ -8,17 +8,19 @@
 #include <gl/glu.h>
 #include <deque>
 
-#define LOW 20
-#define HIGH 400
+#define LOW 5
+#define HIGH 25
 
-#define THRESHOLD 20
+#define THRESHOLD 35
 
+// Manager for a beat detection background graphic
 class Background
 {
 private:
 	RECT m_dimensions;
 	winampVisModule* m_mod;
 
+	// Level rolling average
 	std::deque<int> m_levelAvg;
 
 public:

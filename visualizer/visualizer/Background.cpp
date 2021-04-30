@@ -10,15 +10,16 @@ Background::Background(winampVisModule* mod, RECT dimensions)
 
 int Background::Init() 
 {
+	m_levelAvg.push_back(0);
 	return SUCCESS;
 }
 
 int Background::Render()
 {
 	// Rudementary beat detection
-
 	int cur = 0;
-	int level = 0;
+	int average = 0;
+
 	// Average specific range of spectrums
 	for (int i = LOW; i < HIGH; i++) {
 		cur += ((int)m_mod->spectrumData[0][i] + (int)m_mod->spectrumData[1][i]) / 2;
@@ -36,16 +37,16 @@ int Background::Render()
 	for (std::deque<int>::iterator it = m_levelAvg.begin();
 		it != m_levelAvg.end();
 		it++) {
-		level += *it;
+		average += *it;
 	}
-	level /= m_levelAvg.size();
+	average /= m_levelAvg.size();
 
-	// Cube output for more volatile upper end
-	level *= level * level;
+	// Flash threshold
+	int output = std::log10(cur) > std::log10(average) * 1.05 ? .8 * cur : 0;
 
 	// Draw background
 	glBegin(GL_QUADS);
-	glColor4ub(level, level, level, 100);
+	glColor4ub(output, output, output, 100);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, DEFAULT_WINDOW_HEIGHT, 0);
 	glVertex3f(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, 0);
@@ -57,5 +58,4 @@ int Background::Render()
 
 void Background::Quit()
 {
-
 }

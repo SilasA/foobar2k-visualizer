@@ -137,7 +137,8 @@
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(TargetDir)$(ProjectName).dll" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\vis_visualizer.dll"
-copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\overlay.png"</Command>
+copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\foobar2000\Plugins\overlay.png"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,6 +162,7 @@ copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="libpng\lodepng.h" />
     <ClInclude Include="Peak.h" />
@@ -169,6 +171,7 @@ copy /y "$(ProjectDir)assets\overlay.png" "C:\Users\Silas Agnew\AppData\Roaming\
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="libpng\lodepng.cpp" />
     <ClCompile Include="Peak.cpp" />
     <ClCompile Include="Spectrum.cpp" />

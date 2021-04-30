@@ -1,4 +1,7 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+/* Primary access point between Winamp and this plugin. Everything needed to create
+ * the plugin is defined here.
+ */
+
 #include "pch.h"
 #include <windows.h>
 #include "vis_visualizer.h"
@@ -26,7 +29,7 @@ static winampVisualizer _vis = {
 		0,
 		RENDER_PERIOD,
 		2,
-		0,
+		2,
 		{ 0, },
 		{ 0, },
 		config,
@@ -88,6 +91,7 @@ void config(struct winampVisModule* this_mod) {
 #endif
 }
 
+// Initialize the window and the plugin
 int init(struct winampVisModule* this_mod) {
 	int styles;
 	HWND parent = NULL;
@@ -144,10 +148,11 @@ int init(struct winampVisModule* this_mod) {
 		return FAILURE;
 	}
 
+	// Set window visible and requestion the plugin directory path
 	SendMessage(this_mod->hwndParent, WM_WA_IPC, (WPARAM)getVisInstance()->hWnd, IPC_SETVISWND);
 	char* dir = (char *)SendMessage(this_mod->hwndParent, WM_WA_IPC, 0, IPC_GETPLUGINDIRECTORY);
 
-	// OpenGL on window
+	// Setup OpenGL in the window
 	if (!(getVisInstance()->hDC = GetDC(getVisInstance()->hWnd))) {
 		return FAILURE;
 	}
@@ -172,6 +177,7 @@ int init(struct winampVisModule* this_mod) {
 		return FAILURE;
 	}
 
+	// Setup graphics environment
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
@@ -199,6 +205,8 @@ int init(struct winampVisModule* this_mod) {
 	return SUCCESS;
 }
 
+// Render plugin graphics
+// Called periodically by plugin host
 int render(struct winampVisModule* this_mod) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
@@ -226,6 +234,7 @@ int render(struct winampVisModule* this_mod) {
 void quit(struct winampVisModule* this_mod) {
 	// Stop/dispose of graphics
 	_spectrumVis.Quit();
+	_background.Quit();
 
 	wglMakeCurrent(NULL, NULL);
 	wglDeleteContext(getVisInstance()->hRC);
@@ -248,6 +257,7 @@ void quit(struct winampVisModule* this_mod) {
 #endif
 }
 
+// Recompute environment upon window resize
 void resizeWindow(int width, int height) {
 	if (height == 0)
 		height = 1;
@@ -262,6 +272,7 @@ void resizeWindow(int width, int height) {
 	
 }
 
+// Window event handler
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -288,13 +299,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	case WM_MOVE:
 
-		//glViewport(LOWORD(lParam), HIWORD(lParam), DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-
 		return 0;
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+// Export plugin header
 extern "C" __declspec(dllexport) winampVisHeader* winampVisGetHeader(HWND hwndParent) {
 	return &_vis.hdr;
 }

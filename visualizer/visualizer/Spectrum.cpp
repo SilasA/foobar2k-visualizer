@@ -81,12 +81,14 @@ Spectrum::~Spectrum()
 
 int Spectrum::Init(char* pluginDir)
 {
+	// Construct path to overlay asset
 	m_pluginDir = pluginDir;
 	char path[128];
 	strcat_s(path, 128, pluginDir);
 	strcat_s(path, 128, SPECTRUM_OVERLAY);
 
 	// Load overlay image
+	// With help from libpng's examples
 	std::vector<unsigned char> image;
 	unsigned w, h;
 	unsigned error = lodepng::decode(image, w, h, path);
@@ -95,12 +97,15 @@ int Spectrum::Init(char* pluginDir)
 		return FAILURE;
 	}
 
+	// Closest power of 2 size for the PNG
 	size_t width = 2048;
 	size_t height = 1024;
 
+	// Scale to adjust for distortion
 	m_scaleTexWidth = (double)w / width;
 	m_scaleTexHeight = (double)h / height;
 
+	// Remap image data to fit new width and height
 	std::vector<unsigned char> image2(width * height * 4);
 	for (size_t y = 0; y < h; y++)
 		for (size_t x = 0; x < w; x++)
@@ -188,8 +193,9 @@ int Spectrum::Render()
 		glVertex3f(x, m_dimensions.bottom, 0);
 		glVertex3f(x + barWidth, m_dimensions.bottom, 0);
 
-		// Peak Color
+		// Peak portion Color
 		float max_height = m_dimensions.top - m_dimensions.bottom;
+		// If bar high enough draw additional rect in red
 		if (y > m_dimensions.bottom + max_height * .9) {
 			float extY = m_dimensions.bottom + max_height * .9;
 			glVertex3f(x + barWidth, extY, 0);

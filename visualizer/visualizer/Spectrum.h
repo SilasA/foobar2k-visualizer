@@ -21,12 +21,17 @@
 
 typedef std::deque<std::array<float, DATA_SIZE>>::iterator spec_iter;
 
+// Manager for an N-band spectrum visualizer
 class Spectrum
 {
 private:
+	// History of spectral data
 	std::deque<std::array<float, DATA_SIZE>> m_spectrumRolling[2];
+
+	// Peak caps
 	std::vector<Peak> m_peaks;
 
+	// Current average from spectral history data
 	float	m_spectrumRollingAvg[2][DATA_SIZE];
 	float*	m_spectrumBars;
 	int		m_bars;
@@ -37,6 +42,7 @@ private:
 
 	winampVisModule* m_mod;
 
+	// Overlay data
 	char* m_pluginDir;
 	GLuint m_overlay;
 	float m_scaleTexWidth, m_scaleTexHeight;
@@ -45,7 +51,7 @@ private:
 	TIME_MS m_last;
 #endif
 
-	// Rolling average functions
+	// Computes the current rolling average from spectral history data
 	float UpdateCurrentAverage();
 
 #ifdef DEBUG
@@ -53,6 +59,11 @@ private:
 #endif
 
 public:
+	// Creates the visual spectrum
+	//  mod - pointer to the module data structure (for audio spectrum data)
+	//  dimensions - rectangle where the spectrum will reside on the screen
+	//  bars - how many bars the spectrum will have (must be even)
+	//  rollingAvgSize - (Optional) size of buffer for rolling average
 	Spectrum(winampVisModule* mod, RECT dimensions, int bars, int rollingAvgSize = 5);
 	~Spectrum();
 
