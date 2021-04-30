@@ -32,7 +32,7 @@ Enjoy!
 #### Requirements
 - Visual Studio 2015 or later
 - [Winamp SDK 5+](http://wiki.winamp.com/wiki/SDK_Contents)
-- OpenGL
+- OpenGL (Usually included with windows)
 - (included) [libpng](http://www.libpng.org/pub/png/libpng.html)
 
 #### Setup
